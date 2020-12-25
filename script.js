@@ -1,7 +1,8 @@
 const data = {
-  USD: {EUR: 0.82, GBP: 0.74},
-  EUR: {USD: 1.23, GBP: 0.91},
-  GBP: {USD: 1.35, EUR: 1.10},
+  USD: {EUR: 0.82, GBP: 0.74, TL: 7.68},
+  EUR: {USD: 1.23, GBP: 0.91, TL: 9.35},
+  GBP: {USD: 1.35, EUR: 1.10, TL: 10.21},
+  TL : {USD: 0.13, EUR: 0.11, GBP: 0.098}
 };
 
 const currencyKeys = Object.keys(data);
@@ -38,17 +39,36 @@ createCurrencyElements(currencyKeys, parentToEl, toInputName);
 
 const calculateButton = document.querySelector("#calculate-button");
 calculateButton.addEventListener("click", function(){
-   // kimden ceviriyourz
-   const fromTarget = document.querySelector("input[name='currency_from']:checked").value;
-   // kime ceviriyoruz
-   const toTarget   = document.querySelector("input[name='currency_to']:checked").value;
-   // amountu alalim
-   const amount     = document.querySelector("input[name='amount']").value;
+  const currencyResult = document.querySelector("#currency-result");
+  
+ if (document.querySelector("input[name='currency_from']:checked") && document.querySelector("input[name='currency_to']:checked")){
+  
+  const fromTarget = document.querySelector("input[name='currency_from']:checked").value;  
+  const toTarget = document.querySelector("input[name='currency_to']:checked").value;   
+  const amount = document.querySelector("input[name='amount']").value;
 
-   const currentCurrencyObject = data[fromTarget];
-   const resultForOne = currentCurrencyObject[toTarget];
-   const result = amount * resultForOne;
+  const currentCurrencyObject = data[fromTarget];
+  const resultForOne = currentCurrencyObject[toTarget];
+  const result = amount * resultForOne;
 
-   const currencyResult = document.querySelector("#currency-result");
-   currencyResult.innerHTML = amount + " " + fromTarget + " = " + result + " " + toTarget;
+  const currencyResult = document.querySelector("#currency-result");
+  if(fromTarget == toTarget) {
+    currencyResult.innerHTML = "Choose different value.";
+
+  }else if(isNaN(amount)){
+    currencyResult.innerHTML = "Give the value as a number.";
+  }else{
+    currencyResult.innerHTML = amount + " " + fromTarget + " = " + result + " " + toTarget;
+  }
+
+ }else if(document.querySelector("input[name='currency_from']:checked")){    
+  currencyResult.innerHTML = "Enter the value you want to convert!";
+
+ }else if(document.querySelector("input[name='currency_to']:checked")) {
+  currencyResult.innerHTML = "Enter the value to convert!";
+
+ }else{
+  currencyResult.innerHTML = "You have made no choice!";
+ }
+
 });
